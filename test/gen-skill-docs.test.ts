@@ -1247,6 +1247,46 @@ describe('parameterized resolver support', () => {
   });
 });
 
+// --- Preamble routing injection tests ---
+
+describe('preamble routing injection', () => {
+  const shipContent = fs.readFileSync(path.join(ROOT, 'ship', 'SKILL.md'), 'utf-8');
+
+  test('preamble bash checks for routing section in CLAUDE.md', () => {
+    expect(shipContent).toContain('grep -q "## Skill routing" CLAUDE.md');
+    expect(shipContent).toContain('HAS_ROUTING');
+  });
+
+  test('preamble bash reads routing_declined config', () => {
+    expect(shipContent).toContain('routing_declined');
+    expect(shipContent).toContain('ROUTING_DECLINED');
+  });
+
+  test('preamble includes routing injection AskUserQuestion', () => {
+    expect(shipContent).toContain('Add routing rules to CLAUDE.md');
+    expect(shipContent).toContain("I'll invoke skills manually");
+  });
+
+  test('routing injection respects prior decline', () => {
+    expect(shipContent).toContain('ROUTING_DECLINED');
+    expect(shipContent).toMatch(/routing_declined.*true/);
+  });
+
+  test('routing injection only fires when all conditions met', () => {
+    // Must be: HAS_ROUTING=no AND ROUTING_DECLINED=false AND PROACTIVE_PROMPTED=yes
+    expect(shipContent).toContain('HAS_ROUTING');
+    expect(shipContent).toContain('ROUTING_DECLINED');
+    expect(shipContent).toContain('PROACTIVE_PROMPTED');
+  });
+
+  test('routing section content includes key routing rules', () => {
+    expect(shipContent).toContain('invoke office-hours');
+    expect(shipContent).toContain('invoke investigate');
+    expect(shipContent).toContain('invoke ship');
+    expect(shipContent).toContain('invoke qa');
+  });
+});
+
 // --- {{DESIGN_OUTSIDE_VOICES}} resolver tests ---
 
 describe('DESIGN_OUTSIDE_VOICES resolver', () => {
