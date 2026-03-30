@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.13.11.0] - 2026-03-30 — Sidebar CSS Inspector + Per-Tab Agents
+## [0.14.1.0] - 2026-03-30 — Sidebar CSS Inspector + Per-Tab Agents
 
 The sidebar is now a visual design tool. Pick any element on the page and see the full CSS rule cascade, box model, and computed styles right in the Side Panel. Edit styles live and see changes instantly. Each browser tab gets its own independent agent, so you can work on multiple pages simultaneously without cross-talk. Cleanup is LLM-powered... the agent snapshots the page, understands it semantically, and removes the junk while keeping the site's identity.
 
@@ -20,12 +20,29 @@ The sidebar is now a visual design tool. Pick any element on the page and see th
 
 - **Inspector message allowlist.** The background.js allowlist was missing all inspector message types, silently rejecting them. The inspector was broken for all pages, not just CSP-restricted ones. (Found by Codex review.)
 - **Sticky nav preservation.** Cleanup no longer removes the site's top nav bar. Sorts sticky elements by position and preserves the first full-width element near the top.
+- **Agent won't stop.** System prompt now tells the agent to be concise and stop when done. No more endless screenshot-and-highlight loops.
+- **Focus stealing.** Agent commands no longer pull Chrome to the foreground. Internal tab pinning uses `bringToFront: false`.
+- **Chat message dedup.** Old messages from previous sessions no longer repeat on reconnect.
 
 ### Changed
 
 - **Sidebar banner** now says "Browser co-pilot" instead of the old mode-specific text.
 - **Input placeholder** is "Ask about this page..." (more inviting than the old placeholder).
 - **System prompt** includes prompt injection defense and allowed-commands whitelist from the security audit.
+
+## [0.14.0.0] - 2026-03-30 — Design to Code
+
+You can now go from an approved design mockup to production-quality HTML with one command. `/design-html` takes the winning design from `/design-shotgun` and generates Pretext-native HTML where text actually reflows on resize, heights adjust to content, and layouts are dynamic. No more hardcoded CSS heights or broken text overflow.
+
+### Added
+
+- **`/design-html` skill.** Takes an approved mockup from `/design-shotgun` and generates self-contained HTML with Pretext for computed text layout. Smart API routing picks the right Pretext patterns for each design type (simple layouts, card grids, chat bubbles, editorial spreads). Includes a refinement loop where you preview in browser, give feedback, and iterate until it's right.
+- **Pretext vendored.** 30KB Pretext source bundled in `design-html/vendor/pretext.js` for offline, zero-dependency HTML output. Framework output (React/Svelte/Vue) uses npm install instead.
+- **Design pipeline chaining.** `/design-shotgun` Step 6 now offers `/design-html` as the next step. `/design-consultation` suggests it after producing screen-level designs. `/plan-design-review` chains to both `/design-shotgun` and `/design-html` alongside review skills.
+
+### Changed
+
+- **`/plan-design-review` next steps expanded.** Previously only chained to other review skills. Now also offers `/design-shotgun` (explore variants) and `/design-html` (generate HTML from approved mockups).
 
 ## [0.13.10.0] - 2026-03-29 — Office Hours Gets a Reading List
 
