@@ -95,7 +95,8 @@ gstack/
 ├── cso/             # /cso skill (OWASP Top 10 + STRIDE security audit)
 ├── design-consultation/ # /design-consultation skill (design system from scratch)
 ├── design-shotgun/  # /design-shotgun skill (visual design exploration)
-├── connect-chrome/  # /connect-chrome skill (headed Chrome with side panel)
+├── open-gstack-browser/  # /open-gstack-browser skill (launch GStack Browser)
+├── connect-chrome/  # symlink → open-gstack-browser (backwards compat)
 ├── design/          # Design binary CLI (GPT Image API)
 │   ├── src/         # CLI + commands (generate, variants, compare, serve, etc.)
 │   ├── test/        # Integration tests
