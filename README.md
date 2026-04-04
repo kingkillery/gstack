@@ -59,32 +59,76 @@ Real files get committed to your repo (not a submodule), so `git clone` just wor
 > git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
 > ```
 
-### Other AI Agents (Codex, OpenCode, Cursor, Slate, Factory, Kiro, OpenClaw)
+### Other AI Agents
 
-gstack works on any AI coding agent, not just Claude. Each host gets skill docs
-generated from the same templates with host-appropriate paths, frontmatter, and
-tool names. Setup auto-detects which agents you have installed.
+gstack works on 8 AI coding agents, not just Claude. All 31 skills work across
+every supported agent. Setup auto-detects which agents you have installed, or
+you can target a specific one.
+
+#### Auto-detect (installs for every agent on your machine)
 
 ```bash
 git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
 cd ~/gstack && ./setup
 ```
 
-Setup auto-detects installed agents (`claude`, `codex`, `opencode`, `droid`,
-`kiro-cli`, `slate`, `cursor`, `openclaw`) and installs skills for each one.
-Or specify a host explicitly:
+#### OpenAI Codex CLI
 
 ```bash
-./setup --host codex       # OpenAI Codex CLI
-./setup --host opencode    # OpenCode
-./setup --host factory     # Factory Droid
-./setup --host cursor      # Cursor
-./setup --host openclaw    # OpenClaw
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+cd ~/gstack && ./setup --host codex
 ```
 
-All 31 skills work across all supported agents. Hook-based safety skills
-(careful, freeze, guard) use inline safety advisory prose on non-Claude hosts.
-Sensitive skills use `disable-model-invocation: true` on Factory Droid.
+Skills install to `~/.codex/skills/gstack-*/`. For repo-local installs, clone
+into `.agents/skills/gstack` instead.
+
+#### OpenCode
+
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+cd ~/gstack && ./setup --host opencode
+```
+
+Skills install to `~/.config/opencode/skills/gstack-*/`.
+
+#### Cursor
+
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+cd ~/gstack && ./setup --host cursor
+```
+
+Skills install to `~/.cursor/skills/gstack-*/`.
+
+#### Factory Droid
+
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+cd ~/gstack && ./setup --host factory
+```
+
+Skills install to `~/.factory/skills/gstack-*/`. Sensitive skills use
+`disable-model-invocation: true` so Droids don't auto-invoke them.
+
+#### OpenClaw
+
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+cd ~/gstack && ./setup --host openclaw
+```
+
+Skills install to `~/.openclaw/skills/gstack-*/`. Tool names are rewritten
+for OpenClaw's tool system (exec, read, write, edit, sessions_spawn).
+
+#### Slate / Kiro
+
+```bash
+./setup --host slate       # Slate (Random Labs)
+./setup --host kiro        # Amazon Kiro
+```
+
+Hook-based safety skills (careful, freeze, guard) use inline safety advisory
+prose on all non-Claude hosts.
 
 **Want to add support for another agent?** See [docs/ADDING_A_HOST.md](docs/ADDING_A_HOST.md).
 It's one TypeScript config file, zero code changes.
