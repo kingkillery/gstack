@@ -38,6 +38,7 @@ OpenClaw decides at spawn time which tier of gstack support to use:
 | **Medium** | Multi-file features, refactors | gstack-lite CLAUDE.md appended |
 | **Heavy** | Specific gstack skill needed | "Load gstack. Run /X" |
 | **Full** | Complete features, objectives, projects | gstack-full pipeline appended |
+| **Plan** | "Help me plan a Claude Code project" | gstack-plan pipeline appended |
 
 ### Decision heuristic
 
@@ -45,6 +46,7 @@ OpenClaw decides at spawn time which tier of gstack support to use:
 - Does it touch multiple files but the approach is obvious? -> **Medium**
 - Does the user name a specific skill (/cso, /review, /qa)? -> **Heavy**
 - Is it a feature, project, or objective (not a task)? -> **Full**
+- Does the user want to PLAN something for Claude Code without implementing yet? -> **Plan**
 
 ### Dispatch routing guide (for AGENTS.md)
 
@@ -68,6 +70,13 @@ HEAVY: needs a specific gstack methodology
 FULL: build a complete feature, multi-day scope, needs planning + review
 -> sessions_spawn(runtime: "acp", prompt: "<gstack-full content>\n\n<task>")
   Claude Code runs: /autoplan -> implement -> /ship -> report back
+
+PLAN: user wants to plan a Claude Code project, spec out a feature, or design
+  something before any code is written
+-> sessions_spawn(runtime: "acp", prompt: "<gstack-plan content>\n\n<task>")
+  Claude Code runs: /office-hours -> /autoplan -> saves plan file -> reports back
+  The orchestrator persists the plan link to its memory/knowledge store.
+  When the user is ready to implement, spawn a new FULL session pointing at the plan.
 ```
 
 ### CLAUDE.md collision handling
@@ -97,6 +106,17 @@ A/B tested: 2x time, meaningfully better output.
 3. Implement the approved plan
 4. Run /ship to create a PR
 5. Report back with PR URL and decisions
+
+### gstack-plan (Plan tier)
+`openclaw/gstack-plan-CLAUDE.md` — full review gauntlet, no implementation:
+1. Run /office-hours to produce a design doc
+2. Run /autoplan (CEO + eng + design + DX reviews + codex adversarial)
+3. Save the reviewed plan to `plans/<project-slug>-plan-<date>.md`
+4. Report back: plan path, summary, key decisions, recommended next step
+
+The orchestrator persists the plan link to its own memory store (brain repo,
+knowledge base, or whatever is configured in AGENTS.md). When the user is
+ready to build, spawn a FULL session that references the saved plan.
 
 ### Native methodology skills
 Conversational skills for non-coding work, generated from gstack source templates:
