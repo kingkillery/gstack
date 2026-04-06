@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.15.12.0] - 2026-04-06 — Content Security: 4-Layer Prompt Injection Defense
+## [0.15.12.0] - 2026-04-05 — Content Security: 4-Layer Prompt Injection Defense
 
 When you share your browser with another AI agent via `/pair-agent`, that agent reads web pages. Web pages can contain prompt injection attacks. Hidden text, fake system messages, social engineering in product reviews. This release adds four layers of defense so remote agents can safely browse untrusted sites without being tricked.
 
